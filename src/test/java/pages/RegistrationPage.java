@@ -16,9 +16,8 @@ public class RegistrationPage {
     
     private WebDriver driver;
     private WebDriverWait wait;
-    private final static int timeout = 10;
     
-    public RegistrationPage(WebDriver driver) {
+    public RegistrationPage(WebDriver driver, int timeout) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, timeout);
     }

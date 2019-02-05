@@ -11,10 +11,11 @@ public class NavigationMenu {
     
     private WebDriver driver;
     private WebDriverWait wait;
-    private final static int timeout = 5;
+    private int timeout;
 
-    public NavigationMenu(WebDriver driver) {
+    public NavigationMenu(WebDriver driver, int timeout) {
         this.driver = driver;
+        this.timeout = timeout;
         this.wait = new WebDriverWait(driver, timeout);
     }
     
@@ -31,6 +32,6 @@ public class NavigationMenu {
         if (LOG.isInfoEnabled()) LOG.info("Opening the login page.");
         driver.findElement(loginLink).click();
         
-        return new LoginPage(driver);
+        return new LoginPage(driver, timeout);
     }
 }

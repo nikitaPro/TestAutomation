@@ -16,10 +16,11 @@ public class LoginPage {
     
     private WebDriver driver;
     private WebDriverWait wait;
-    private final static int timeout = 10;
+    private int timeout;
     
-    public LoginPage(WebDriver driver) {
+    public LoginPage(WebDriver driver, int timeout) {
         this.driver = driver;
+        this.timeout = timeout;
         this.wait = new WebDriverWait(driver, timeout);
     }
     
@@ -30,7 +31,7 @@ public class LoginPage {
         By signupLink = By.xpath("//a[@href='/signup']");
         wait.until(ExpectedConditions.presenceOfElementLocated(signupLink));
         driver.findElement(signupLink).click();
-        return new RegistrationPage(driver);
+        return new RegistrationPage(driver, timeout);
     }
     
     public LoginPage fillDownEmailAndPass(LoginDataSet dataSet) {

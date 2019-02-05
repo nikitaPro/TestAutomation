@@ -17,7 +17,7 @@ import pages.RegistrationPage;
 public class Registration {
     private static WebDriver driver;
     private final static String WEB_PAGE_ADDRESS = "https://netpeaksoftware.com/";
-    private final static int TIMEOUT = 10;
+    private final static int TIMEOUT = 30;
     
     private static NavigationMenu menu;
     private static LoginPage loginPage;
@@ -37,7 +37,7 @@ public class Registration {
         thirdSet = new SignupDataSet("", "", "valid@gmail.com", "123456", false);
         fourthSet = new SignupDataSet("SomeName", "SomeLastName", "valid@gmail.com", "123456", false);
         
-        menu = new NavigationMenu(driver);
+        menu = new NavigationMenu(driver, TIMEOUT);
     }
     
     @Before

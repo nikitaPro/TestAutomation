@@ -34,7 +34,7 @@ public class Login {
     @BeforeClass
     public static void startLoginPage() {
         driver = new Chrome().getDriver(WEB_PAGE_ADDRESS, TIMEOUT);
-        menu = new NavigationMenu(driver);
+        menu = new NavigationMenu(driver, TIMEOUT);
         
         validDataSet = new LoginDataSet(email, pass);
         
