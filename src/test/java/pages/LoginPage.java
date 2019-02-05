@@ -16,7 +16,7 @@ public class LoginPage {
     
     private WebDriver driver;
     private WebDriverWait wait;
-    private final static int timeout = 5;
+    private final static int timeout = 10;
     
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -27,7 +27,9 @@ public class LoginPage {
         if (LOG.isInfoEnabled()) {
             LOG.info("Opening registration page.");
         }
-        driver.findElement(By.xpath("//a[@href='/signup']")).click();
+        By signupLink = By.xpath("//a[@href='/signup']");
+        wait.until(ExpectedConditions.presenceOfElementLocated(signupLink));
+        driver.findElement(signupLink).click();
         return new RegistrationPage(driver);
     }
     
