@@ -2,10 +2,16 @@ package testScripts;
 
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
 
 import dataSets.SignupDataSet;
@@ -14,9 +20,10 @@ import pages.LoginPage;
 import pages.NavigationMenu;
 import pages.RegistrationPage;
 
+@RunWith(Parameterized.class)
 public class Registration {
     private static WebDriver driver;
-    private final static String WEB_PAGE_ADDRESS = "https://netpeaksoftware.com/";
+    private final static String MAIN_PAGE_ADDRESS = "https://netpeaksoftware.com/";
     private final static int TIMEOUT = 30;
     
     private static NavigationMenu menu;
@@ -28,9 +35,23 @@ public class Registration {
     private static SignupDataSet thirdSet;
     private static SignupDataSet fourthSet;
     
+    public Registration(Lang lang) {
+        switch (lang) {
+        case RU: menu.chooseRuLanguage(); break;
+        case EN: menu.chooseEnLanguage(); break;
+        }
+    }
+    
+    @Parameters
+    public static Collection<Object[]> data() {
+      Object[][] data = {{Lang.RU},{Lang.EN}};
+      return Arrays.asList(data);
+    }
+    
     @BeforeClass
     public static void startLoginPage() {
-        driver = new Chrome().getDriver(WEB_PAGE_ADDRESS, TIMEOUT);
+        driver = new Chrome().getDriver(MAIN_PAGE_ADDRESS, TIMEOUT);
+        driver.manage().window().fullscreen();
         
         firstSet = new SignupDataSet("", "", "valid@gmail.com", "123456", true);
         secondSet = new SignupDataSet("SomeName", "SomeLastName", "", "123456", true);

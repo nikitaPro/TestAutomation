@@ -28,7 +28,7 @@ public class LoginPage {
         if (LOG.isInfoEnabled()) {
             LOG.info("Opening registration page.");
         }
-        By signupLink = By.xpath("//a[@href='/signup']");
+        By signupLink = By.xpath("//a[contains(@href,'signup')]");
         wait.until(ExpectedConditions.presenceOfElementLocated(signupLink));
         driver.findElement(signupLink).click();
         return new RegistrationPage(driver, timeout);
@@ -80,6 +80,7 @@ public class LoginPage {
     }
     
     private void typingIntoInputField(By field, String inputData) {
+        wait.until(ExpectedConditions.elementToBeClickable(field));
         WebElement elem = driver.findElement(field);
         elem.clear();
         elem.sendKeys(inputData);

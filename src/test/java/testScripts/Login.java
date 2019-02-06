@@ -1,12 +1,19 @@
 package testScripts;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 import org.openqa.selenium.WebDriver;
 
 import dataSets.LoginDataSet;
@@ -14,9 +21,10 @@ import drivers.Chrome;
 import pages.LoginPage;
 import pages.NavigationMenu;
 
+@RunWith(Parameterized.class)
 public class Login {
     private static WebDriver driver;
-    private final static String WEB_PAGE_ADDRESS = "https://netpeaksoftware.com/";
+    private final static String MAIN_PAGE_ADDRESS = "https://netpeaksoftware.com/";
     private final static int TIMEOUT = 10;
     
     private static String email = "netpeaksoftwaretest@gmail.com";
@@ -31,10 +39,24 @@ public class Login {
     private static NavigationMenu menu;
     private static LoginPage loginPage;
     
+    public Login(Lang lang) {
+        switch (lang) {
+        case RU: menu.chooseRuLanguage(); break;
+        case EN: menu.chooseEnLanguage(); break;
+        }
+    }
+    
+    @Parameters
+    public static Collection<Object[]> data() {
+      Object[][] data = {{Lang.RU},{Lang.EN}};
+      return Arrays.asList(data);
+    }
+    
     @BeforeClass
     public static void startLoginPage() {
-        driver = new Chrome().getDriver(WEB_PAGE_ADDRESS, TIMEOUT);
+        driver = new Chrome().getDriver(MAIN_PAGE_ADDRESS, TIMEOUT);
         menu = new NavigationMenu(driver, TIMEOUT);
+        menu.chooseRuLanguage();
         
         validDataSet = new LoginDataSet(email, pass);
         
@@ -50,12 +72,15 @@ public class Login {
     
     @Test
     public void loginWithValidData() {
-        loginPage.fillDownEmailAndPass(validDataSet)
-            .clickLoginButton();
-        
-        assertEquals("User control panel page not opened!", 
-                "https://netpeaksoftware.com/ru/ucp", 
-                driver.getCurrentUrl());
+        try {
+            loginPage.fillDownEmailAndPass(validDataSet)
+                .clickLoginButton();
+            
+            assertTrue("User control panel page not opened!", 
+                    driver.getCurrentUrl().contains("ucp"));
+        } finally {
+            driver.get(MAIN_PAGE_ADDRESS + "logout");
+        }
     }
     
     @Test
